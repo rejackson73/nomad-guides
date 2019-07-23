@@ -84,7 +84,7 @@ resource "null_resource" "set_quota_preemption" {
   provisioner "remote-exec" {
     inline = [
     "nomad namespace apply -quota ${nomad_quota_specification.default.name} -address=http://${module.nomadconsul.primary_server_private_ips[0]}:4646 default",
-    "curl -X POST -H \"Content-Type: application/json\" -d {\"PreemptionConfig\": {\"SystemSchedulerEnabled\": true,\"BatchSchedulerEnabled\": false,\"ServiceSchedulerEnabled\": true}} http://${module.nomadconsul.primary_server_private_ips[0]}:4646/v1/operator/scheduler/configuration"   
+    "curl -X POST -H \"Content-Type: application/json\" -d \"{\"PreemptionConfig\": {\"SystemSchedulerEnabled\": true,\"BatchSchedulerEnabled\": false,\"ServiceSchedulerEnabled\": true}}\" http://${module.nomadconsul.primary_server_private_ips[0]}:4646/v1/operator/scheduler/configuration"   
     ]
 
     connection {
