@@ -43,6 +43,28 @@ module "nomadconsul" {
   vault_url         = "${var.vault_url}"
 }
 
+resource "nomad_quota_specification" "default-quota" {
+  name        = "default-quota"
+  description = "Default quota for all services"
+
+  limits {
+    region = "global"
+
+    region_limit {
+      cpu       = 2499
+      memory_mb = 9500
+    }
+  }
+}
+
+resource "null_resource" "attach_quotas_and_preempt" {
+  provisioner "remote-exec" {
+    inline = [
+    "nomad namespace apply -quota ${nomad_quota_specification.default.name} -address=http://${module.nomadconsul.primary_server_private_ips[0]}:4646 default",
+    "curl -X POST -H "Content-Type: application/json" -d {"PreemptionConfig": {"SystemSchedulerEnabled": true,"BatchSchedulerEnabled": false,"ServiceSchedulerEnabled": true}} http://${module.nomadconsul.primary_server_private_ips[0]}:4646/v1/operator/scheduler/configuration"   
+    ]
+  }
+  
 resource "null_resource" "start_sock_shop" {
   provisioner "remote-exec" {
     inline = [
