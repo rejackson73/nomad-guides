@@ -6,6 +6,10 @@ provider "vault" {
   address = "${var.vault_url}"
 }
 
+provider "nomad" {
+  address = "http://${element(module.nomadconsul.primary_server_public_ips, 0)}:4646"
+} 
+
 data "vault_generic_secret" "aws_auth" {
   path = "aws-tf/creds/deploy"
 }
