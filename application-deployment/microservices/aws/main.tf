@@ -43,8 +43,8 @@ module "nomadconsul" {
   vault_url         = "${var.vault_url}"
 }
 
-resource "nomad_quota_specification" "default-quota" {
-  name        = "default-quota"
+resource "nomad_quota_specification" "default" {
+  name        = "default"
   description = "Default quota for all services"
 
   limits {
