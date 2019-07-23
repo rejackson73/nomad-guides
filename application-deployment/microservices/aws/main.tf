@@ -64,6 +64,7 @@ resource "null_resource" "attach_quotas_and_preempt" {
     "curl -X POST -H \"Content-Type: application/json\" -d {\"PreemptionConfig\": {\"SystemSchedulerEnabled\": true,\"BatchSchedulerEnabled\": false,\"ServiceSchedulerEnabled\": true}} http://${module.nomadconsul.primary_server_private_ips[0]}:4646/v1/operator/scheduler/configuration"   
     ]
   }
+}
   
 resource "null_resource" "start_sock_shop" {
   provisioner "remote-exec" {
