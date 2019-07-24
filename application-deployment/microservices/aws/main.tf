@@ -82,6 +82,5 @@ resource "null_resource" "start_sock_shop_and_set_quota" {
       private_key = "${var.private_key_data}"
     }
   }
-  depends_on = ["nomad_quota_specification.default"]
 }
 
