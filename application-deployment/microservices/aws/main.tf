@@ -62,7 +62,7 @@ resource "nomad_quota_specification" "default" {
   depends_on = ["module.nomadconsul"]
 }
 
-rresource "null_resource" "start_sock_shop" {
+resource "null_resource" "start_sock_shop" {
   provisioner "remote-exec" {
     inline = [
       "sleep 180",
