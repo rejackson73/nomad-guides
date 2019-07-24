@@ -321,7 +321,7 @@ resource "aws_instance" "primary" {
   count                  = "${var.server_count}"
 
   #Instance tags
-  tags {
+  tags = {
     Name = "${var.name_tag_prefix}-server-${count.index}"
     ConsulAutoJoin = "${var.cluster_tag_value}"
     owner = "${var.owner}"
@@ -355,7 +355,7 @@ resource "aws_instance" "client" {
   depends_on             = ["aws_instance.primary"]
 
   #Instance tags
-  tags {
+  tags = {
     Name = "${var.name_tag_prefix}-client-${count.index}"
     ConsulAutoJoin = "${var.cluster_tag_value}"
     owner = "${var.owner}"
