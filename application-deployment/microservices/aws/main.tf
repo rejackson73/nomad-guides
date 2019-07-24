@@ -7,7 +7,7 @@ provider "vault" {
 }
 
 provider "nomad" {
-  address = "http://${module.nomadconsul.primary_server_private_ips[0]}:4646"
+  address = "http://\"element(module.nomadconsul.primary_server_public_ips, 0)\":4646"
 }
 
 data "vault_generic_secret" "aws_auth" {
