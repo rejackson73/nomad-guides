@@ -6,8 +6,6 @@ Client private IPs: ${join(", ", module.nomadconsul.client_private_ips)}
 Server public IPs: ${join(", ", module.nomadconsul.primary_server_public_ips)}
 Server private IPs: ${join(", ", module.nomadconsul.primary_server_private_ips)}
 
-`ssh -i "${var.key_name}.pem" ubuntu@${element(module.nomadconsul.primary_server_public_ips, 0)}`
-
 
 
 
