@@ -287,7 +287,7 @@ resource "aws_security_group_rule" "vault_egress" {
 }
 
 # Template File for Server
- user_data_server_primary = templatefile("${path.module}/backends.tmpl", { server_count = "${var.server_count}", region = "${var.region}" , cluster_tag_value = "${var.cluster_tag_value}" , token_for_nomad = "${var.token_for_nomad}" , vault_url = "${var.vault_url}" })
+variable "user_data_server_primary" = templatefile("${path.module}/backends.tmpl", { server_count = "${var.server_count}", region = "${var.region}" , cluster_tag_value = "${var.cluster_tag_value}" , token_for_nomad = "${var.token_for_nomad}" , vault_url = "${var.vault_url}" })
 
 
 # Template File for Client
