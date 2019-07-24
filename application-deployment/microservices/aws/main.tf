@@ -8,11 +8,10 @@ provider "vault" {
   address = var.vault_url
 }
 
-locals {
-    nomad_addr = element(module.nomadconsul.primary_server_public_ips, 0)
-  }
+nomad_addr = element(module.nomadconsul.primary_server_public_ips, 0)
+
 provider "nomad" {
-  address = "http://${local.nomad_addr}:4646"
+  address = "http://${nomad_addr}:4646"
 }
 
 data "vault_generic_secret" "aws_auth" {
