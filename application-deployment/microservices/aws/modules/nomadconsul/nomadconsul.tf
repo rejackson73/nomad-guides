@@ -19,7 +19,7 @@ resource "aws_security_group" "primary" {
   name   = "${var.name_tag_prefix}-sg"
   vpc_id = "${var.vpc_id}"
 
-  tags {
+  tags = {
     Name = "${var.name_tag_prefix}-sg"
   }
 }
@@ -286,30 +286,30 @@ resource "aws_security_group_rule" "vault_egress" {
     cidr_blocks = ["0.0.0.0/0"]
 }
 
-# Template File for Server
-data "template_file" "user_data_server_primary" {
-  template = "${file("${path.root}/user-data-server.sh")}"
+# Template File for Server  Commented out by REJ for templatefile in 0.12
+#data "template_file" "user_data_server_primary" {
+#  template = "${file("${path.root}/user-data-server.sh")}"
 
-  vars {
-    server_count      = "${var.server_count}"
-    region            = "${var.region}"
-    cluster_tag_value = "${var.cluster_tag_value}"
-    token_for_nomad   = "${var.token_for_nomad}"
-    vault_url         = "${var.vault_url}"
-  }
-}
+#  vars {
+#    server_count      = "${var.server_count}"
+#    region            = "${var.region}"
+#    cluster_tag_value = "${var.cluster_tag_value}"
+#    token_for_nomad   = "${var.token_for_nomad}"
+#    vault_url         = "${var.vault_url}"
+#  }
+#}
 
-# Template File for Client
-data "template_file" "user_data_client" {
-  template = "${file("${path.root}/user-data-client.sh")}"
+# Template File for Client  Commented out by REJ for templatefile in 0.12
+#data "template_file" "user_data_client" {
+#  template = "${file("${path.root}/user-data-client.sh")}"
 
-  vars {
-    region            = "${var.region}"
-    cluster_tag_value = "${var.cluster_tag_value}"
-    server_ip = "${aws_instance.primary.0.private_ip}"
-    vault_url         = "${var.vault_url}"
-  }
-}
+#  vars {
+#    region            = "${var.region}"
+#    cluster_tag_value = "${var.cluster_tag_value}"
+#    server_ip = "${aws_instance.primary.0.private_ip}"
+#    vault_url         = "${var.vault_url}"
+#  }
+#}
 
 # Server EC2 Instances
 resource "aws_instance" "primary" {
@@ -321,7 +321,7 @@ resource "aws_instance" "primary" {
   count                  = "${var.server_count}"
 
   #Instance tags
-  tags {
+  tags = {
     Name = "${var.name_tag_prefix}-server-${count.index}"
     ConsulAutoJoin = "${var.cluster_tag_value}"
     owner = "${var.owner}"
@@ -329,7 +329,19 @@ resource "aws_instance" "primary" {
     created-by = "Terraform"
   }
 
-  user_data            = "${data.template_file.user_data_server_primary.rendered}"
+#  REJ commented out in favor of templatefile for 0.12
+#  user_data            = "${data.template_file.user_data_server_primary.rendered}"
+  user_data            = templatefile(
+    "${path.root}/user-data-server.sh", 
+       { 
+       server_count = "${var.server_count}", 
+       region = "${var.region}" , 
+       cluster_tag_value = "${var.cluster_tag_value}", 
+       token_for_nomad = "${var.token_for_nomad}", 
+       vault_url = "${var.vault_url}" 
+       }
+    )
+
   iam_instance_profile = "${aws_iam_instance_profile.instance_profile.name}"
 }
 
@@ -344,7 +356,7 @@ resource "aws_instance" "client" {
   depends_on             = ["aws_instance.primary"]
 
   #Instance tags
-  tags {
+  tags = {
     Name = "${var.name_tag_prefix}-client-${count.index}"
     ConsulAutoJoin = "${var.cluster_tag_value}"
     owner = "${var.owner}"
@@ -352,7 +364,18 @@ resource "aws_instance" "client" {
     created-by = "Terraform"
   }
 
-  user_data = "${data.template_file.user_data_client.rendered}"
+#  REJ commented out in favor of templatefile for 0.12
+#  user_data = "${data.template_file.user_data_client.rendered}"
+  user_data = templatefile(
+    "${path.root}/user-data-client.sh", 
+       { 
+       region = "${var.region}", 
+         cluster_tag_value = "${var.cluster_tag_value}", 
+         server_ip = "${aws_instance.primary.0.private_ip}", 
+         vault_url = "${var.vault_url}" 
+         }
+    )
+
   iam_instance_profile = "${aws_iam_instance_profile.instance_profile.name}"
 }
 
