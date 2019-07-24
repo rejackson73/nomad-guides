@@ -332,7 +332,7 @@ resource "aws_instance" "primary" {
 #  REJ commented out in favor of templatefile for 0.12
 #  user_data            = "${data.template_file.user_data_server_primary.rendered}" 
   user_data            = templatefile(
-    "${path.module}/backends.tmpl", 
+    "${path.root}/user-data-server.sh", 
        { 
        server_count = "${var.server_count}", 
        region = "${var.region}" , 
