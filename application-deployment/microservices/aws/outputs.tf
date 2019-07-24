@@ -14,4 +14,6 @@ The Nomad UI can be accessed at http://${element(module.nomadconsul.primary_serv
 
 
 CONFIGURATION
+
 }
+
