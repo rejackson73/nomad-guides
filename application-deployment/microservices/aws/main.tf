@@ -47,6 +47,22 @@ module "nomadconsul" {
   vault_url         = "${var.vault_url}"
 }
   
+  
+resource "nomad_quota_specification" "default" {
+  name        = "default"
+  description = "Default quota for all services"
+
+  limits {
+    region = "global"
+
+    region_limit {
+      cpu       = 2499
+      memory_mb = 9500
+    }
+  }
+  depends_on = ["module.nomadconsul"]
+}
+  
 resource "null_resource" "start_sock_shop" {
   provisioner "remote-exec" {
     inline = [
