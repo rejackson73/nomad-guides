@@ -47,20 +47,20 @@ module "nomadconsul" {
   vault_url         = "${var.vault_url}"
 }
 
-resource "nomad_quota_specification" "default" {
-  name        = "default"
-  description = "Default quota for all services"
+#resource "nomad_quota_specification" "default" {
+#  name        = "default"
+#  description = "Default quota for all services"
 
-  limits {
-    region = "global"
+#  limits {
+#    region = "global"
 
-    region_limit {
-      cpu       = 2499
-      memory_mb = 9500
-    }
-  }
-  depends_on = ["module.nomadconsul"]
-}
+#    region_limit {
+#      cpu       = 2499
+#      memory_mb = 9500
+#    }
+#  }
+#  depends_on = ["module.nomadconsul"]
+#}
 
 resource "null_resource" "start_sock_shop_and_set_quota" {
   provisioner "remote-exec" {
@@ -68,6 +68,7 @@ resource "null_resource" "start_sock_shop_and_set_quota" {
       "sleep 180",
       "nomad job run -address=http://${module.nomadconsul.primary_server_private_ips[0]}:4646 /home/ubuntu/sockshop.nomad",
       "nomad job run -address=http://${module.nomadconsul.primary_server_private_ips[0]}:4646 /home/ubuntu/sockshopui.nomad",
+      "curl -X POST -H \"Content-Type: application/json\" -d \"{\"Name\": \"default\",\"Description\": \"Limit the shared default namespace\",\"Limits\": [{\"Region\": \"global\",\"RegionLimit\": {\"CPU\": 2499,\"MemoryMB\": 9500\}}]}\" http://${module.nomadconsul.primary_server_private_ips[0]}:4646/v1/quota",
       "nomad namespace apply -quota ${nomad_quota_specification.default.name} -address=http://${module.nomadconsul.primary_server_private_ips[0]}:4646 default",
       "curl -X POST -H \"Content-Type: application/json\" -d \"{\"PreemptionConfig\": {\"SystemSchedulerEnabled\": true,\"BatchSchedulerEnabled\": false,\"ServiceSchedulerEnabled\": true}}\" http://${module.nomadconsul.primary_server_private_ips[0]}:4646/v1/operator/scheduler/configuration",
 
