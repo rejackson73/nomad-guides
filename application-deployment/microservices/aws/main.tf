@@ -1,5 +1,3 @@
-variable "nomad_addr" {}
-
 terraform {
   required_version = ">= 0.11.7"
 }
@@ -8,10 +6,8 @@ provider "vault" {
   address = var.vault_url
 }
 
-nomad_addr = element(module.nomadconsul.primary_server_public_ips, 0)
-
 provider "nomad" {
-  address = "http://${nomad_addr}:4646"
+  address = "http://${element(module.nomadconsul.primary_server_public_ips, 0)}:4646"
 }
 
 data "vault_generic_secret" "aws_auth" {
