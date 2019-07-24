@@ -28,7 +28,7 @@ provider "aws" {
 }
 
 module "nomadconsul" {
-  source = "modules/nomadconsul"
+  source = "./modules/nomadconsul"
 
   region            = "${var.region}"
   ami               = "${var.ami}"
