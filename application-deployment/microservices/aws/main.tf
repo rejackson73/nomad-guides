@@ -95,6 +95,6 @@ resource "null_resource" "set_quota_preemption" {
       private_key = "${var.private_key_data}"
     }
   }
-  depends_on = ["nomad_quota_specification.default"]
+  depends_on = ["nomad_quota_specification.default", "null_resource.start_sock_shop"]
 }
 
