@@ -5,22 +5,22 @@ variable "region" {
 
 variable "ami" {
   description = "AMI ID"
-  default     = "ami-0773061edb0eb6550"
+  default = "ami-009feb0e09775afc6"
 }
 
 variable "vpc_cidr" {
   description = "VPC CIDR"
-  default     = "10.0.0.0/16"
+  default = "10.0.0.0/16"
 }
 
 variable "subnet_cidr" {
   description = "Subnet CIDR"
-  default     = "10.0.1.0/24"
+  default = "10.0.1.0/24"
 }
 
 variable "subnet_az" {
   description = "The AZ for the public subnet"
-  default     = "us-east-1a"
+  default = "us-east-1a"
 }
 
 variable "server_instance_type" {
@@ -33,8 +33,7 @@ variable "client_instance_type" {
   default     = "t2.medium"
 }
 
-variable "key_name" {
-}
+variable "key_name" {}
 
 variable "private_key_data" {
   description = "contents of the private key"
@@ -62,12 +61,12 @@ variable "cluster_tag_value" {
 
 variable "owner" {
   description = "Adds owner tag to EC2 instances"
-  default     = ""
+  default = ""
 }
 
 variable "ttl" {
   description = "Adds TTL tag to EC2 instances for reaping purposes. Reaping is only done for instances deployed by HashiCorp SEs. In any case, -1 means no reaping."
-  default     = "-1"
+  default = "-1"
 }
 
 variable "token_for_nomad" {
@@ -77,4 +76,3 @@ variable "token_for_nomad" {
 variable "vault_url" {
   description = "URL of your Vault server including port"
 }
-
