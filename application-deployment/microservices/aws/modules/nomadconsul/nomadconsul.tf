@@ -286,10 +286,18 @@ resource "aws_security_group_rule" "vault_egress" {
     cidr_blocks = ["0.0.0.0/0"]
 }
 
-# Template File for Server
-data "template_file" "user_data_server_primary" {
-   templatefile("${path.module}/backends.tmpl", { server_count = "${var.server_count}", region = "${var.region}" , cluster_tag_value = "${var.cluster_tag_value}" , token_for_nomad = "${var.token_for_nomad}" , vault_url = "${var.vault_url}" })
-  }
+# Template File for Server Commented out by REJ for templatefile in 0.12
+#data "template_file" "user_data_server_primary" {
+#  template = "${file("${path.root}/user-data-server.sh")}"
+
+#  vars {
+#    server_count      = "${var.server_count}"
+#    region            = "${var.region}"
+#    cluster_tag_value = "${var.cluster_tag_value}"
+#    token_for_nomad   = "${var.token_for_nomad}"
+#    vault_url         = "${var.vault_url}"
+#  }
+#}
 
 # Template File for Client
 data "template_file" "user_data_client" {
@@ -321,7 +329,9 @@ resource "aws_instance" "primary" {
     created-by = "Terraform"
   }
 
-  user_data            = "${data.template_file.user_data_server_primary.rendered}"
+#  REJ commented out in favor of templatefile for 0.12
+#  user_data            = "${data.template_file.user_data_server_primary.rendered}" 
+  user_data            = templatefile("${path.module}/backends.tmpl", { server_count = "${var.server_count}", region = "${var.region}" , cluster_tag_value = "${var.cluster_tag_value}" , token_for_nomad = "${var.token_for_nomad}" , vault_url = "${var.vault_url}" })
   iam_instance_profile = "${aws_iam_instance_profile.instance_profile.name}"
 }
 
