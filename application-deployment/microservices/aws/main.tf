@@ -62,14 +62,32 @@ module "nomadconsul" {
 #  depends_on = ["module.nomadconsul"]
 #}
 
+resource "nomad_quota_specification" "default" {
+  name        = "default"
+  description = "web team quota"
+
+  limits {
+    region = "global"
+
+    region_limit {
+      cpu       = 2499
+      memory_mb = 9500
+    }
+  }
+}
+
+resource "nomad_namespace" "default" {
+  name = "default"
+  description = "System Default Namespace"
+  quota = "${nomad_quota_specification.default.name}"
+}
+
 resource "null_resource" "start_sock_shop_and_set_quota" {
   provisioner "remote-exec" {
     inline = [
       "sleep 180",
       "nomad job run -address=http://${module.nomadconsul.primary_server_private_ips[0]}:4646 /home/ubuntu/sockshop.nomad",
       "nomad job run -address=http://${module.nomadconsul.primary_server_private_ips[0]}:4646 /home/ubuntu/sockshopui.nomad",
-      "curl -X POST -H \"Content-Type: application/json\" -d @/home/ubuntu/default-quota.json http://${module.nomadconsul.primary_server_private_ips[0]}:4646/v1/quota",
-      "nomad namespace apply -quota shared-quota -address=http://${module.nomadconsul.primary_server_private_ips[0]}:4646 default",
       "curl -X POST -H \"Content-Type: application/json\" -d \"{\"PreemptionConfig\": {\"SystemSchedulerEnabled\": true,\"BatchSchedulerEnabled\": false,\"ServiceSchedulerEnabled\": true}}\" http://${module.nomadconsul.primary_server_private_ips[0]}:4646/v1/operator/scheduler/configuration",
 
     ]
