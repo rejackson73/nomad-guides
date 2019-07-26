@@ -70,7 +70,7 @@ resource "nomad_quota_specification" "default" {
     region = "global"
 
     region_limit {
-      cpu       = 2499
+      cpu       = 3000
       memory_mb = 9500
     }
   }
@@ -88,7 +88,8 @@ resource "null_resource" "start_sock_shop" {
     inline = [
       "sleep 180",
       "nomad job run -address=http://${module.nomadconsul.primary_server_private_ips[0]}:4646 /home/ubuntu/sockshop.nomad",
-      "nomad job run -address=http://${module.nomadconsul.primary_server_private_ips[0]}:4646 /home/ubuntu/sockshopui.nomad"
+      "nomad job run -address=http://${module.nomadconsul.primary_server_private_ips[0]}:4646 /home/ubuntu/sockshopui.nomad",
+      "curl -X POST -H \"Content-Type: application/json\" -d @preemption.hcl http://nomad:4646/v1/operator/scheduler/configuration"
     ]
 
     connection {
