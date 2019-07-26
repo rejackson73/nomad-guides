@@ -77,11 +77,11 @@ resource "nomad_quota_specification" "default" {
   depends_on = ["module.nomadconsul","null_resource.start_sock_shop"]
 }
 
-#resource "nomad_namespace" "default" {
-#  name = "default"
-#  description = "System Default Namespace"
-#  quota = "${nomad_quota_specification.default.name}"
-#}
+resource "nomad_namespace" "default" {
+  name = "default"
+  description = "System Default Namespace"
+  quota = "${nomad_quota_specification.default.name}"
+}
 
 resource "null_resource" "start_sock_shop" {
   provisioner "remote-exec" {
