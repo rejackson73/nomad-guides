@@ -62,23 +62,6 @@ module "nomadconsul" {
 #  depends_on = ["module.nomadconsul"]
 #}
 
-resource "nomad_quota_specification" "default" {
-  name        = "default"
-  description = "web team quota"
-
-  limits {
-    region = "global"
-
-    region_limit {
-      cpu       = 2499
-      memory_mb = 9500
-    }
-  }
-  depends_on = ["module.nomadconsul", "null_resource"."start_sock_shop"]
-}
-
-
-
 resource "null_resource" "start_sock_shop" {
   provisioner "remote-exec" {
     inline = [
