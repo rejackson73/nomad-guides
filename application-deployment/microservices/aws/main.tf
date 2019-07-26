@@ -74,6 +74,7 @@ resource "nomad_quota_specification" "default" {
       memory_mb = 9500
     }
   }
+  depends_on = ["module.nomadconsul"]
 }
 
 resource "nomad_namespace" "default" {
