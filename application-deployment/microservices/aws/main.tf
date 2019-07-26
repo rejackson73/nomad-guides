@@ -83,14 +83,12 @@ resource "nomad_namespace" "default" {
   quota = "${nomad_quota_specification.default.name}"
 }
 
-resource "null_resource" "start_sock_shop_and_set_quota" {
+resource "null_resource" "start_sock_shop" {
   provisioner "remote-exec" {
     inline = [
       "sleep 180",
       "nomad job run -address=http://${module.nomadconsul.primary_server_private_ips[0]}:4646 /home/ubuntu/sockshop.nomad",
-      "nomad job run -address=http://${module.nomadconsul.primary_server_private_ips[0]}:4646 /home/ubuntu/sockshopui.nomad",
-      "curl -X POST -H \"Content-Type: application/json\" -d \"{\"PreemptionConfig\": {\"SystemSchedulerEnabled\": true,\"BatchSchedulerEnabled\": false,\"ServiceSchedulerEnabled\": true}}\" http://${module.nomadconsul.primary_server_private_ips[0]}:4646/v1/operator/scheduler/configuration",
-
+      "nomad job run -address=http://${module.nomadconsul.primary_server_private_ips[0]}:4646 /home/ubuntu/sockshopui.nomad"
     ]
 
     connection {
