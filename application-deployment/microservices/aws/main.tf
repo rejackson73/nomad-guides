@@ -74,7 +74,7 @@ resource "nomad_quota_specification" "default" {
       memory_mb = 9500
     }
   }
-  depends_on = ["module.nomadconsul"]
+  depends_on = ["module.nomadconsul","null_resource.start_sock_shop"]
 }
 
 resource "nomad_namespace" "default" {
