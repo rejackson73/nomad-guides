@@ -26,7 +26,7 @@ Within Terraform, perform the following actions:
 
 Terraform Variables | Values 
 ---------|----------
- key_name | <name for AWS Keypair in Pre-requisites step 2> 
+ key_name | <name for AWS Keypair in Pre-requisites step 3> 
  private_key_data |<contents of keypair including “-----BEGIN RSA PRIVATE KEY-----” and “-----END RSA PRIVATE KEY-----“> 
  name_tag_prefix |   
  cluster_tag_value |  
