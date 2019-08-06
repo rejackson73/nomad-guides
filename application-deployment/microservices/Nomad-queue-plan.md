@@ -1,10 +1,10 @@
-#Nomad Feature Demo Setup and Script
+# Nomad Feature Demo Setup and Script
 
 This exercise demonstrates the quota, namespace, and preemption functionality available in the Enterprise Nomad product.  The infrastructure utilizes the SockShop demonstration provided and maintained by Weaveworks, and is built and operated using Terraform, Vault, and Consul. However, the main focus of the demonstration is on the functionality of Nomad.  All code and configuration is maintained in Github, however, SSH to the servers (and optionally HTTP access) is required.  
 
 It is in the best interest of ALL Involved to ensure the environment is setup properly before actually performing the demo.  At this time, however, the workspace must be destroyed completed as part of the ‘reset’ procedure.  
 
-##Pre-requisites:
+## Pre-requisites:
 1.	Access to Terraform Cloud, Github (need exact project)
 2.	Access to AWS US-East-1 Region
 3.	AWS Keypair to use for the servers
