@@ -23,8 +23,8 @@ data "external" "region" {
 
 provider "aws" {
   region = "${data.external.region.result["region"]}"
-  access_key = "${data.vault_generic_secret.aws_auth.data["access_key"]}"
-  secret_key = "${data.vault_generic_secret.aws_auth.data["secret_key"]}"
+  #access_key = "${data.vault_generic_secret.aws_auth.data["access_key"]}"
+  #secret_key = "${data.vault_generic_secret.aws_auth.data["secret_key"]}"
 }
 
 module "nomadconsul" {
