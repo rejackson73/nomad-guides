@@ -11,7 +11,7 @@ It is in the best interest of ALL Involved to ensure the environment is setup pr
 4.	Vault login token for demo vault server (is http://kubernetes-vault-elb-1163802512.us-east-1.elb.amazonaws.com:8200)
 5.	Token for Nomad to Vault:  vault token create -policy nomad-server -ttl=720h | sed -e '1,2d' | sed -e '2,6d' | sed 's/ //g' | sed 's/token//' When running that command, be sure to include the final single quote. You will need to add the token to your workspace variables later.
 
-Setting up the environment:
+## Setting up the environment:
 
 It is recommended to fork the existing Github repository in case changes are required.  This repository will also be connected to Terraform for system provisioning.
 
@@ -26,7 +26,7 @@ Within Terraform, perform the following actions:
 
 Terraform Variables | Values 
 ---------|----------
- key_name | <name for AWS Keypair in Pre-requisites step 2> 
+ key_name | <name for AWS Keypair in Pre-requisites step 3> 
  private_key_data |<contents of keypair including “-----BEGIN RSA PRIVATE KEY-----” and “-----END RSA PRIVATE KEY-----“> 
  name_tag_prefix |   
  cluster_tag_value |  
@@ -43,7 +43,7 @@ Environment Variables | Values
 ---------|----------
 VAULT_TOKEN | <personal vault token created in pre-requisites step 4>
 
-Demonstration Flow
+## Demonstration Flow
 
 Review the Nomad Demo presentation, being sure to hit the following points:
 -	How the Sockshop demo works at a high level
