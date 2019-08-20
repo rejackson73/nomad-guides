@@ -88,8 +88,8 @@ resource "null_resource" "apply_fake_quota" {
   provisioner "remote-exec" {
     inline = [
       "echo '{\"Name\":\"fake\",\"Limits\":[{\"Region\":\"global\",\"RegionLimit\": {\"CPU\":2500,\"MemoryMB\":1000}}]}' > ~/fake.hcl",
-      "nomad quota apply -token=${module.nomadconsul.bootstrap_token} -address=http://${module.nomadconsul.primary_server_private_ips[0]}:4646 -json ~/fake.hcl",
-      "nomad namespace apply -token=${module.nomadconsul.bootstrap_token} -address=http://${module.nomadconsul.primary_server_private_ips[0]}:4646 -quota fake default",
+      "nomad quota apply -address=http://${module.nomadconsul.primary_server_private_ips[0]}:4646 -json ~/fake.hcl",
+      "nomad namespace apply  -address=http://${module.nomadconsul.primary_server_private_ips[0]}:4646 -quota fake default",
     ]
     when = "destroy"
   }
