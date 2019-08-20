@@ -101,7 +101,7 @@ resource "null_resource" "apply_fake_quota" {
     private_key = "${var.private_key_data}"
   }
 
-  depends_on = ["null_resource.attach_quotas"]
+  depends_on = ["nomad_quota_specification.default"]
 
 }
 
