@@ -16,3 +16,4 @@ vault
 consul
 *.pem
 .DS_Store
+application-deployment/microservices/aws/terraform.tfvars

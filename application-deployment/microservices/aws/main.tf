@@ -77,6 +77,23 @@ resource "nomad_quota_specification" "default" {
   depends_on = ["module.nomadconsul","null_resource.start_sock_shop"]
 }
 
+resource "null_resource" "apply_fake_quota" {
+  # We create and apply a fake resource quota to the
+  # default namespace because Nomad does not like it
+  # if when the default quota Terrafrom created and
+  # attached to the default namespace is removed
+  # unless another quota is attached.
+  # Note that is this a destroy provisioner only run
+  # when we run `terraform destroy`
+  provisioner "remote-exec" {
+    inline = [
+      "echo '{\"Name\":\"fake\",\"Limits\":[{\"Region\":\"global\",\"RegionLimit\": {\"CPU\":2500,\"MemoryMB\":1000}}]}' > ~/fake.hcl",
+      "nomad quota apply -token=${module.nomadconsul.bootstrap_token} -address=http://${module.nomadconsul.primary_server_private_ips[0]}:4646 -json ~/fake.hcl",
+      "nomad namespace apply -token=${module.nomadconsul.bootstrap_token} -address=http://${module.nomadconsul.primary_server_private_ips[0]}:4646 -quota fake default",
+    ]
+    when = "destroy"
+  }
+
 resource "nomad_namespace" "default" {
   name = "default"
   description = "System Default Namespace"
