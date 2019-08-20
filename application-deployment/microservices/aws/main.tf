@@ -62,22 +62,22 @@ module "nomadconsul" {
 #  depends_on = ["module.nomadconsul"]
 #}
 
-resource "nomad_quota_specification" "default" {
-  name        = "default"
-  description = "web team quota"
+// resource "nomad_quota_specification" "default" {
+//   name        = "default"
+//   description = "web team quota"
 
-  limits {
-    region = "global"
+//   limits {
+//     region = "global"
 
-    region_limit {
-      cpu       = 3000
-      memory_mb = 9500
-    }
-  }
-  depends_on = ["module.nomadconsul","null_resource.start_sock_shop"]
-}
+//     region_limit {
+//       cpu       = 3000
+//       memory_mb = 9500
+//     }
+//   }
+//   depends_on = ["module.nomadconsul","null_resource.start_sock_shop"]
+// }
 
-resource "null_resource" "apply_fake_quota" {
+// resource "null_resource" "apply_fake_quota" {
   # We create and apply a fake resource quota to the
   # default namespace because Nomad does not like it
   # if when the default quota Terrafrom created and
@@ -85,31 +85,31 @@ resource "null_resource" "apply_fake_quota" {
   # unless another quota is attached.
   # Note that is this a destroy provisioner only run
   # when we run `terraform destroy`
-  provisioner "remote-exec" {
-    inline = [
-      "echo '{\"Name\":\"fake\",\"Limits\":[{\"Region\":\"global\",\"RegionLimit\": {\"CPU\":2500,\"MemoryMB\":1000}}]}' > ~/fake.hcl",
-      "nomad quota apply -address=http://${module.nomadconsul.primary_server_private_ips[0]}:4646 -json ~/fake.hcl",
-      "nomad namespace apply  -address=http://${module.nomadconsul.primary_server_private_ips[0]}:4646 -quota fake default",
-    ]
-    when = "destroy"
-  }
-  connection {
-    host = "${module.nomadconsul.primary_server_public_ips[0]}"
-    type = "ssh"
-    agent = false
-    user = "ubuntu"
-    private_key = "${var.private_key_data}"
-  }
+//   provisioner "remote-exec" {
+//     inline = [
+//       "echo '{\"Name\":\"fake\",\"Limits\":[{\"Region\":\"global\",\"RegionLimit\": {\"CPU\":2500,\"MemoryMB\":1000}}]}' > ~/fake.hcl",
+//       "nomad quota apply -address=http://${module.nomadconsul.primary_server_private_ips[0]}:4646 -json ~/fake.hcl",
+//       "nomad namespace apply  -address=http://${module.nomadconsul.primary_server_private_ips[0]}:4646 -quota fake default",
+//     ]
+//     when = "destroy"
+//   }
+//   connection {
+//     host = "${module.nomadconsul.primary_server_public_ips[0]}"
+//     type = "ssh"
+//     agent = false
+//     user = "ubuntu"
+//     private_key = "${var.private_key_data}"
+//   }
 
-  depends_on = ["nomad_quota_specification.default"]
+//   depends_on = ["nomad_quota_specification.default"]
 
-}
+// }
 
-resource "nomad_namespace" "default" {
-  name = "default"
-  description = "System Default Namespace"
-  quota = "${nomad_quota_specification.default.name}"
-}
+// resource "nomad_namespace" "default" {
+//   name = "default"
+//   description = "System Default Namespace"
+//   quota = "${nomad_quota_specification.default.name}"
+// }
 
 resource "null_resource" "start_sock_shop" {
   provisioner "remote-exec" {
