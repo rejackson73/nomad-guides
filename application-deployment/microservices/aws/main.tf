@@ -62,20 +62,20 @@ module "nomadconsul" {
 #  depends_on = ["module.nomadconsul"]
 #}
 
-// resource "nomad_quota_specification" "default" {
-//   name        = "default"
-//   description = "web team quota"
+resource "nomad_quota_specification" "default" {
+  name        = "default"
+  description = "web team quota"
 
-//   limits {
-//     region = "global"
+  limits {
+    region = "global"
 
-//     region_limit {
-//       cpu       = 3000
-//       memory_mb = 9500
-//     }
-//   }
-//   depends_on = ["module.nomadconsul","null_resource.start_sock_shop"]
-// }
+    region_limit {
+      cpu       = 3000
+      memory_mb = 9500
+    }
+  }
+  depends_on = ["module.nomadconsul","null_resource.start_sock_shop"]
+}
 
 resource "null_resource" "apply_fake_quota" {
   # We create and apply a fake resource quota to the
@@ -101,7 +101,7 @@ resource "null_resource" "apply_fake_quota" {
     private_key = "${var.private_key_data}"
   }
 
-  #depends_on = ["nomad_quota_specification.default"]
+  # depends_on = ["nomad_quota_specification.default"]
 
 }
 
