@@ -93,6 +93,17 @@ resource "null_resource" "apply_fake_quota" {
     ]
     when = "destroy"
   }
+  connection {
+    host = "${module.nomadconsul.primary_server_public_ips[0]}"
+    type = "ssh"
+    agent = false
+    user = "ubuntu"
+    private_key = "${var.private_key_data}"
+  }
+
+  depends_on = ["null_resource.attach_quotas"]
+
+}
 
 resource "nomad_namespace" "default" {
   name = "default"
