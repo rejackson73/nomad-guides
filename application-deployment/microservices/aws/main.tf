@@ -100,12 +100,11 @@ module "nomadconsul" {
 //     user = "ubuntu"
 //     private_key = "${var.private_key_data}"
 //   }
-
-//   # depends_on = ["nomad_quota_specification.default"]
+ # depends_on = ["nomad_quota_specification.default"]
 
 // }
 
-// resource "nomad_namespace" "default" {
+// resource "nomad_namespace" "socks" {
 //   name = "default"
 //   description = "System Default Namespace"
 //   quota = "${nomad_quota_specification.default.name}"
